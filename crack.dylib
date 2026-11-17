@@ -1,0 +1,11 @@
+#import <UIKit/UIKit.h>
+
+%hook UIDevice
+
+- (NSUUID *)identifierForVendor {
+    // Trả về một chuỗi UUID giả mạo luôn hợp lệ
+    // Bạn có thể đổi chuỗi này thành bất kỳ UDID nào có định dạng tương tự
+    return [[NSUUID alloc] initWithUUIDString:@"12345678-ABCD-1234-ABCD-1234567890AB"];
+}
+
+%end
