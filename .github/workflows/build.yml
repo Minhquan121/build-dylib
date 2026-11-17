@@ -20,7 +20,10 @@ jobs:
         run: |
           # Tải môi trường Theos
           git clone --recursive https://github.com/theos/theos.git $THEOS
-
+      
+      - name: Cài đặt ldid
+        run: brew install ldid   
+    
       - name: Biên dịch mã nguồn
         run: |
           # Chạy lệnh make để build ra dylib và đóng gói
