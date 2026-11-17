@@ -1,0 +1,39 @@
+name: Build Theos Tweak
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Cho phép bạn bấm nút chạy thủ công trên GitHub
+
+jobs:
+  build:
+    name: Build Dylib
+    runs-on: macos-latest
+    env:
+      THEOS: ${{ github.workspace }}/theos
+
+    steps:
+      - name: Checkout Kho lưu trữ
+        uses: actions/checkout@v4
+
+      - name: Cài đặt Theos & iOS SDK
+        run: |
+          # Tải môi trường Theos
+          git clone --recursive https://github.com/theos/theos.git $THEOS
+          # Tải thư viện iOS SDK
+          git clone https://github.com/theos/sdks.git $THEOS/sdks
+
+      - name: Biên dịch mã nguồn
+        run: |
+          # Chạy lệnh make để build ra dylib và đóng gói
+          make package FINALPACKAGE=1
+
+      - name: Tải lên Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tweak-Files
+          # Gom tất cả file .deb và .dylib xuất ra để tải về
+          path: |
+            packages/*.deb
+            .theos/obj/debug/*.dylib
+            .theos/obj/*.dylib
